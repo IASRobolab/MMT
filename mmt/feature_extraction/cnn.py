@@ -1,15 +1,16 @@
 from __future__ import absolute_import
 from collections import OrderedDict
 
-
+import pdb
 from ..utils import to_torch
-
 def extract_cnn_feature(model, inputs, modules=None):
     model.eval()
     # with torch.no_grad():
     inputs = to_torch(inputs).cuda()
     if modules is None:
         outputs = model(inputs)
+        if type(outputs) is tuple:
+          outputs = outputs[0]
         outputs = outputs.data.cpu()
         return outputs
     # Register forward hook for each module
