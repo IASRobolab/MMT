@@ -13,7 +13,7 @@ __factory = {
     'resnet_ibn50a': resnet_ibn50a,
     'resnet_ibn101a': resnet_ibn101a,
     'wacv_model' : wacv_model,
-    'wacv_model_ibn' : wacv_model
+    'wacv_model_ibn' : wacv_model_ibn
 }
 
 
