@@ -5,9 +5,9 @@ from torch.nn import functional as F
 from torch.nn import init
 import torchvision
 import torch
-
+from torchvision.models.resnet import Bottleneck
 from .resnet_ibn_a import resnet50_ibn_a, resnet101_ibn_a
-
+import copy
 
 __all__ = ['ResNetIBN', 'resnet_ibn50a', 'resnet_ibn101a', 'wacv_model_ibn']
 
@@ -26,7 +26,7 @@ class wacv_model_ibn(nn.Module):
         feats = 256
         #########################resnet50################################
 
-        resnet = wacv_model_ibn.__factory[50](pretrained=True)
+        resnet = wacv_model_ibn.__factory['50a'](pretrained=True)
         self.backbone = nn.Sequential(
             resnet.conv1,
             resnet.bn1,
