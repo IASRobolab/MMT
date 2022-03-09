@@ -9,9 +9,12 @@ import torch
 from torch import nn
 from torch.backends import cudnn
 from torch.utils.data import DataLoader
-
+from pathlib import Path
+mmt_path = str(Path.home()) + '/Documents/MMT'
+sys.path.append(mmt_path)
 from mmt import datasets
 from mmt import models
+from mmt.trainers import MultiTrainer
 from mmt.trainers import PreTrainer
 from mmt.evaluators import Evaluator
 from mmt.utils.data import IterLoader
@@ -107,7 +110,10 @@ def main_worker(args):
                  args.width, args.batch_size, args.workers, 0, iters)
 
     # Create model
-    model = models.create(args.arch, num_features=args.features, dropout=args.dropout, num_classes=num_classes)
+    if args.arch=='wacv_model_ibn' or args.arch=='wacv_model':
+      model = models.create(args.arch)
+    else:
+      model = models.create(args.arch, num_features=args.features, dropout=args.dropout, num_classes=num_classes)
     model.cuda()
     model = nn.DataParallel(model)
 
@@ -138,7 +144,10 @@ def main_worker(args):
     lr_scheduler = WarmupMultiStepLR(optimizer, args.milestones, gamma=0.1, warmup_factor=0.01, warmup_iters=args.warmup_step)
 
     # Trainer
-    trainer = PreTrainer(model, num_classes, margin=args.margin)
+    if args.arch=='wacv_model_ibn' or args.arch=='wacv_model':
+      trainer = MultiTrainer(model, num_classes, margin=args.margin)
+    else:
+      trainer = PreTrainer(model, num_classes, margin=args.margin)
 
     # Start training
     for epoch in range(start_epoch, args.epochs):
@@ -211,7 +220,7 @@ if __name__ == '__main__':
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
     parser.add_argument('--data-dir', type=str, metavar='PATH',
-                        default=osp.join(working_dir, 'data'))
+                        default='/home/azunino/Documents/Data/RE-ID')
     parser.add_argument('--logs-dir', type=str, metavar='PATH',
                         default=osp.join(working_dir, 'logs'))
     main()

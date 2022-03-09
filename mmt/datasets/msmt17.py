@@ -34,10 +34,10 @@ class Dataset_MSMT(object):
 
     @property
     def images_dir(self):
-        return osp.join(self.root, 'MSMT17_V1')
+        return osp.join(self.root, 'MSMT17_V2')
 
     def load(self, verbose=True):
-        exdir = osp.join(self.root, 'MSMT17_V1')
+        exdir = osp.join(self.root, 'MSMT17_V2')
         self.train, train_pids = _pluck_msmt(osp.join(exdir, 'list_train.txt'), 'train')
         self.val, val_pids = _pluck_msmt(osp.join(exdir, 'list_val.txt'), 'train')
         self.train = self.train + self.val
@@ -78,7 +78,7 @@ class MSMT17(Dataset_MSMT):
         mkdir_if_missing(raw_dir)
 
         # Download the raw zip file
-        fpath = osp.join(raw_dir, 'MSMT17_V1')
+        fpath = osp.join(raw_dir, 'MSMT17_V2')
         if osp.isdir(fpath):
             print("Using downloaded file: " + fpath)
         else:
