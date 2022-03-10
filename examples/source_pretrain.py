@@ -15,6 +15,7 @@ sys.path.append(mmt_path)
 from mmt import datasets
 from mmt import models
 from mmt.trainers import MultiTrainer
+from mmt.trainers import MultiTrainer_2scale
 from mmt.trainers import PreTrainer
 from mmt.evaluators import Evaluator
 from mmt.utils.data import IterLoader
@@ -110,7 +111,7 @@ def main_worker(args):
                  args.width, args.batch_size, args.workers, 0, iters)
 
     # Create model
-    if args.arch=='wacv_model_ibn' or args.arch=='wacv_model':
+    if args.arch=='wacv_model_ibn' or args.arch=='wacv_model' or args.arch=='wacv_model_ibn_2scale':
       model = models.create(args.arch)
     else:
       model = models.create(args.arch, num_features=args.features, dropout=args.dropout, num_classes=num_classes)
@@ -146,6 +147,8 @@ def main_worker(args):
     # Trainer
     if args.arch=='wacv_model_ibn' or args.arch=='wacv_model':
       trainer = MultiTrainer(model, num_classes, margin=args.margin)
+    elif args.arch=='wacv_model_ibn_2scale':
+      trainer = MultiTrainer_2scale(model, num_classes, margin=args.margin)
     else:
       trainer = PreTrainer(model, num_classes, margin=args.margin)
 
@@ -186,8 +189,8 @@ if __name__ == '__main__':
                         choices=datasets.names())
     parser.add_argument('-b', '--batch-size', type=int, default=64)
     parser.add_argument('-j', '--workers', type=int, default=4)
-    parser.add_argument('--height', type=int, default=256, help="input height")
-    parser.add_argument('--width', type=int, default=128, help="input width")
+    parser.add_argument('--height', type=int, default=384, help="input height")
+    parser.add_argument('--width', type=int, default=192, help="input width")
     parser.add_argument('--num-instances', type=int, default=4,
                         help="each minibatch consist of "
                              "(batch_size // num_instances) identities, and "
@@ -215,7 +218,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=80)
     parser.add_argument('--iters', type=int, default=200)
     parser.add_argument('--seed', type=int, default=1)
-    parser.add_argument('--print-freq', type=int, default=10)
+    parser.add_argument('--print-freq', type=int, default=100)
     parser.add_argument('--margin', type=float, default=0.0, help='margin for the triplet loss with batch hard')
     # path
     working_dir = osp.dirname(osp.abspath(__file__))
