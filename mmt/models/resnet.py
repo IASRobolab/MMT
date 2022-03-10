@@ -22,7 +22,7 @@ class wacv_model(nn.Module):
         101: torchvision.models.resnet101,
         152: torchvision.models.resnet152,
     }
-    def __init__(self):
+    def __init__(self, pretrained=True):
         super(wacv_model, self).__init__()
         # num_classes = 767  # cuhk03
         # num_classes = 702  # duke
@@ -31,7 +31,7 @@ class wacv_model(nn.Module):
         feats = 256
         #########################resnet50################################
 
-        resnet = wacv_model.__factory[50](pretrained=True)
+        resnet = wacv_model.__factory[50](pretrained=pretrained)
         self.backbone = nn.Sequential(
             resnet.conv1,
             resnet.bn1,

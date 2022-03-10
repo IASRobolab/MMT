@@ -17,8 +17,8 @@ class wacv_model_ibn(nn.Module):
         '50a': resnet50_ibn_a,
         '101a': resnet101_ibn_a
     }
-    def __init__(self):
-        super(wacv_model_ibn, self).__init__()
+    def __init__(self, pretrained=True):
+        super(wacv_model_ibn,  self).__init__()
         # num_classes = 767  # cuhk03
         # num_classes = 702  # duke
         #num_classes = 751  # market
@@ -26,7 +26,7 @@ class wacv_model_ibn(nn.Module):
         feats = 256
         #########################resnet50################################
 
-        resnet = wacv_model_ibn.__factory['50a'](pretrained=True)
+        resnet = wacv_model_ibn.__factory['50a'](pretrained=pretrained)
         self.backbone = nn.Sequential(
             resnet.conv1,
             resnet.bn1,
@@ -206,7 +206,7 @@ class wacv_model_ibn_2scale(nn.Module):
         '50a': resnet50_ibn_a,
         '101a': resnet101_ibn_a
     }
-    def __init__(self):
+    def __init__(self, pretrained=True):
         super(wacv_model_ibn_2scale, self).__init__()
         # num_classes = 767  # cuhk03
         # num_classes = 702  # duke
@@ -215,7 +215,7 @@ class wacv_model_ibn_2scale(nn.Module):
         feats = 256
         #########################resnet50################################
 
-        resnet = wacv_model_ibn_2scale.__factory['50a'](pretrained=True)
+        resnet = wacv_model_ibn_2scale.__factory['50a'](pretrained=pretrained)
         self.backbone = nn.Sequential(
             resnet.conv1,
             resnet.bn1,
